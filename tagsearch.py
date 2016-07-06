@@ -37,13 +37,23 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='alltags 0.1')
     # What is this??
     #
-    # basepath_encoded = './notes/'
+    # This handle cases like this:
+    # basepath_encoded = '$HOME/./notes/'
+    # I usually put the folder somewhere (Drive, Dropbox) and symlynk in my
+    # home. This way, one path rules them all.
+    #
     # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # basepath = pro.communicate()[0].split('\n')[0]
 
     basepath = './notes/'
 
-    #tmp_cmd = " grep '^tags :' "+basepath+"*.md | sed -E -e 's/:tags//' "
+    # Here was wrong: E265 block comment should start with '# ' [pep8]
+    # use https://github.com/klen/python-mode and
+    # let g:pymode_lint_checkers = ["pep8"]
+    # let g:pymode_lint_write    = 1
+    # let g:pymode_lint_message = 1
+    #
+    # tmp_cmd = " grep '^tags :' "+basepath+"*.md | sed -E -e 's/:tags//' "
 
     tmp_cmd = " grep '^tags :' %s*.md | sed -E -e 's/:tags//' " % (basepath)
 
@@ -61,7 +71,7 @@ if __name__ == '__main__':
             print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
     else:
         if not arguments['--list']:
-            print(','.join(dict_data.keys()))
+            print(' '.join(dict_data.keys()))
         else:
             print('\n'.join(dict_data.keys()))
     # print(arguments)
