@@ -3,7 +3,7 @@ import yaml
 
 tags_bag = ['spaces', 'bar' , 'test', 'foo', 'dog', 'python' , '42' , 'fish', 'Monty']
 
-n_notes = 20
+n_notes = 100
 
 outtext = '''
 # Lorem ipsum dolor sit amet
@@ -22,7 +22,7 @@ for i in range(n_notes):
     ntags = random.randint(0,5)
     filename = 'notes/notes %s.md' %i
     tags_local = random.sample(tags_bag,ntags)
-    with open(filename, 'a') as file:
+    with open(filename, 'w') as file:
         file.write('---\n')
         file.write('tags : '+yaml.dump( tags_local))
         file.write('---\n')
