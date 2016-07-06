@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     if not arguments['--onlypath']:
         if not arguments['--noalign']:
-            max_keys_len = max([len(k) for k, v in dict_data.iteritems()])
+            max_keys_len = len(max(dict_data, key=len))
             print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
         else:
             print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
