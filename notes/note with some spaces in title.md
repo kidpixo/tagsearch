@@ -1,6 +1,0 @@
----
-tags : [ spaces , bar]
----
-
-balababalbalalbaa
-
