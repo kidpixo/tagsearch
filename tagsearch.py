@@ -16,12 +16,13 @@ Options:
   -o --onlypath  output only the matching filenames, flat list ad string (or list if -l is set).
   -l --list      if -o is set, switch to list (\\n separated) output instead flat list.
 """
+from __future__ import print_function
 from docopt import docopt
 import subprocess
+import yaml
 
 
 def extract_tags(cmd, basepath_len, arguments):
-    import yaml
     pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     data = pro.communicate()[0].split('\n')
     if arguments['--fullpath']:
@@ -34,11 +35,17 @@ def extract_tags(cmd, basepath_len, arguments):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='alltags 0.1')
-    basepath_encoded = './notes/'
-    pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    basepath = pro.communicate()[0].split('\n')[0]
+    # What is this??
+    #
+    # basepath_encoded = './notes/'
+    # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # basepath = pro.communicate()[0].split('\n')[0]
 
-    tmp_cmd = " grep '^tags :' "+basepath+"*.md | sed -E -e 's/:tags//' "
+    basepath = './notes/'
+
+    #tmp_cmd = " grep '^tags :' "+basepath+"*.md | sed -E -e 's/:tags//' "
+
+    tmp_cmd = " grep '^tags :' %s*.md | sed -E -e 's/:tags//' " % (basepath)
 
     if len(arguments['<tags>']) != 0:
         for ar in arguments['<tags>']:
@@ -49,12 +56,12 @@ if __name__ == '__main__':
     if not arguments['--onlypath']:
         if not arguments['--noalign']:
             max_keys_len = max([len(k) for k, v in dict_data.iteritems()])
-            print '\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems())
+            print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
         else:
-            print '\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems())
+            print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
     else:
         if not arguments['--list']:
-            print ','.join(dict_data.keys())
+            print(','.join(dict_data.keys()))
         else:
-            print '\n'.join(dict_data.keys())
+            print('\n'.join(dict_data.keys()))
     # print(arguments)
