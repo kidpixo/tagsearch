@@ -1,20 +1,22 @@
 #!/usr/bin/env python
-"""List all tags from yaml in text files.
+"""list all tags from yaml in text files.
 
-Usage:
-  alltags.py
-  alltags.py <tags>...
-  alltags.py -h | --help
-  alltags.py -v | --version
-  alltags.py [-fn] [-o | -ol] [<tags>...]
+usage:
+  tagsearch.py
+  tagsearch.py [<tags>...]
+  tagsearch.py [-fnd] [-o | -ol] [<tags>...]
+  tagsearch.py -h | --help
+  tagsearch.py -v | --version
 
-Options:
-  -h --help      show help.
-  -v --version   show version.
+options:
+  -s --search    search for the tags
   -f --fullpath  output full file path (default fullpath).
   -n --noalign   aligh the output in columns (default align).
   -o --onlypath  output only the matching filenames, flat list ad string (or list if -l is set).
   -l --list      if -o is set, switch to list (\\n separated) output instead flat list.
+  -d --debug     print the command to execute in the command line and the passed arguments and do not execute the actual command.
+  -h --help      show help.
+  -v --version   show version.
 """
 from __future__ import print_function
 from docopt import docopt
@@ -23,7 +25,7 @@ import yaml
 
 
 def extract_tags(cmd, basepath_len, arguments):
-    pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pro = subprocess.popen(cmd, shell=true, stdout=subprocess.pipe, stderr=subprocess.pipe)
     data = pro.communicate()[0].split('\n')
     if arguments['--fullpath']:
         dict_data = {yaml.load(d).keys()[0]: yaml.load(d)[yaml.load(d).keys()[0]] for d in data if d is not ''}
@@ -34,44 +36,45 @@ def extract_tags(cmd, basepath_len, arguments):
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='alltags 0.1')
-    # What is this??
+    arguments = docopt(__doc__, version='tagsearch 0.1')
+    # what is this??
     #
-    # This handle cases like this:
-    # basepath_encoded = '$HOME/./notes/'
-    # I usually put the folder somewhere (Drive, Dropbox) and symlynk in my
-    # home. This way, one path rules them all.
-    #
-    # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # this handle cases like this:
+    # basepath_encoded = '$HOME/.notes/'
+    # i usually put the folder somewhere (drive, dropbox) and symlynk in my
+    # home. this way, one path rules them all.
+
+    # pro = subprocess.popen('echo '+basepath_encoded, shell=true, stdout=subprocess.pipe, stderr=subprocess.pipe)
     # basepath = pro.communicate()[0].split('\n')[0]
 
     basepath = './notes/'
 
-    # Here was wrong: E265 block comment should start with '# ' [pep8]
-    # use https://github.com/klen/python-mode and
-    # let g:pymode_lint_checkers = ["pep8"]
-    # let g:pymode_lint_write    = 1
-    # let g:pymode_lint_message = 1
-    #
-    # tmp_cmd = " grep '^tags :' "+basepath+"*.md | sed -E -e 's/:tags//' "
-
-    tmp_cmd = " grep '^tags :' %s*.md | sed -E -e 's/:tags//' " % (basepath)
+    tmp_cmd = " grep '^\s*tags :' %s*.md | sed -e -e 's/:tags//' " % (basepath)
 
     if len(arguments['<tags>']) != 0:
         for ar in arguments['<tags>']:
             tmp_cmd = tmp_cmd + " -e '/^.* : .*"+ar+".*/!d'"
 
-    dict_data = extract_tags(tmp_cmd, len(basepath), arguments)
+    if arguments['--debug']:
+        print('command to execute:')
+        print(tmp_cmd)
+        print('------------------')
+        print('arguments:')
+        print(arguments)
+        print('------------------')
 
-    if not arguments['--onlypath']:
-        if not arguments['--noalign']:
-            max_keys_len = len(max(dict_data, key=len))
-            print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
-        else:
-            print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
     else:
-        if not arguments['--list']:
-            print(' '.join(dict_data.keys()))
+
+        dict_data = extract_tags(tmp_cmd, len(basepath), arguments)
+
+        if not arguments['--onlypath']:
+            if not arguments['--noalign']:
+                max_keys_len = len(max(dict_data, key=len))
+                print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
+            else:
+                print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
         else:
-            print('\n'.join(dict_data.keys()))
-    # print(arguments)
+            if not arguments['--list']:
+                print(' '.join(dict_data.keys()))
+            else:
+                print('\n'.join(dict_data.keys()))
