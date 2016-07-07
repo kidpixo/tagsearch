@@ -51,7 +51,12 @@ if __name__ == '__main__':
 
     if len(arguments['<tags>']) != 0:
         for ar in arguments['<tags>']:
-            tmp_cmd = tmp_cmd + " -e '/^.* : .*"+ar+".*/!d'"
+            if ar[0] == "!":
+                # delete the occurence of a tag
+                tmp_cmd = tmp_cmd + " -e '/^.* : .*"+ar[1:]+".*/d'"
+            else:
+                # preserve the occurence of a tag
+                tmp_cmd = tmp_cmd + " -e '/^.* : .*"+ar+".*/!d'"
 
     if arguments['--debug']:
         print('command to execute:')
