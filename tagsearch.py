@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 """list all tags from yaml in text files.
 
-usage:
+Witouht any paramter, list all the files and tags.
+Tags with ! prepended are delete from result.
+
+Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
   tagsearch.py [-fnd] [-o | -ol] [<tags>...]
   tagsearch.py -h | --help
   tagsearch.py -v | --version
 
-options:
-  -s --search    search for the tags
+Options:
   -f --fullpath  output full file path (default fullpath).
   -n --noalign   aligh the output in columns (default align).
   -o --onlypath  output only the matching filenames, flat list ad string (or list if -l is set).
