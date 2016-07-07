@@ -39,11 +39,10 @@ def extract_tags(cmd, basepath_len, arguments):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='tagsearch 0.1')
-    # this handle cases like this:
-    # basepath_encoded = '$HOME/.notes/'
-    # i usually put the folder somewhere (drive, dropbox) and symlynk in my
+    # this handle cases like $HOME in the basepath.
+    # I usually put the folder somewhere (drive, dropbox) and symlynk in my
     # home. this way, one path rules them all.
-
+    # basepath_encoded = '$HOME/.notes/'
     # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # basepath = pro.communicate()[0].split('\n')[0]
 
