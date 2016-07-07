@@ -25,7 +25,7 @@ import yaml
 
 
 def extract_tags(cmd, basepath_len, arguments):
-    pro = subprocess.popen(cmd, shell=true, stdout=subprocess.pipe, stderr=subprocess.pipe)
+    pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     data = pro.communicate()[0].split('\n')
     if arguments['--fullpath']:
         dict_data = {yaml.load(d).keys()[0]: yaml.load(d)[yaml.load(d).keys()[0]] for d in data if d is not ''}
@@ -37,19 +37,17 @@ def extract_tags(cmd, basepath_len, arguments):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='tagsearch 0.1')
-    # what is this??
-    #
     # this handle cases like this:
     # basepath_encoded = '$HOME/.notes/'
     # i usually put the folder somewhere (drive, dropbox) and symlynk in my
     # home. this way, one path rules them all.
 
-    # pro = subprocess.popen('echo '+basepath_encoded, shell=true, stdout=subprocess.pipe, stderr=subprocess.pipe)
+    # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # basepath = pro.communicate()[0].split('\n')[0]
 
     basepath = './notes/'
 
-    tmp_cmd = " grep '^\s*tags :' %s*.md | sed -e -e 's/:tags//' " % (basepath)
+    tmp_cmd = " grep '^\s*tags :' %s*.md | sed -E -e 's/:tags//' " % (basepath)
 
     if len(arguments['<tags>']) != 0:
         for ar in arguments['<tags>']:
