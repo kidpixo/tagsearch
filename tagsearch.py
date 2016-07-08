@@ -7,7 +7,7 @@ Tags with ! prepended are delete from result.
 Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
-  tagsearch.py [-fnd] [-p | -pl] [<tags>...]
+  tagsearch.py [-fnd] [-t | -tl] [-p | -pl] [<tags>...]
   tagsearch.py [-t | -p] [<tags>...]
   tagsearch.py -h | --help
   tagsearch.py -v | --version
@@ -16,6 +16,7 @@ Options:
   -f --fullpath  output full file path (default fullpath).
   -n --noalign   aligh the output in columns (default align).
   -p --pathonly  output only the matching filenames, flat list ad string (or list if -l is set).
+  -t --tagonly   output only the tags of matching files.
   -l --list      if -o is set, switch to list (\\n separated) output instead flat list.
   -d --debug     print the command to execute in the command line and the passed arguments and do not execute the actual command.
   -h --help      show help.
