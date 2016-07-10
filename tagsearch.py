@@ -7,22 +7,23 @@ Tags with ! prepended are delete from result.
 Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
-  tagsearch.py [-fnd] [-p | -pl] [<tags>...]
-  tagsearch.py [-t | -p] [<tags>...]
+  tagsearch.py [-dfne] [-p | -pl] [<tags>...]
   tagsearch.py -h | --help
   tagsearch.py -v | --version
 
 Options:
-  -f --fullpath  output full file path (default fullpath).
-  -n --noalign   aligh the output in columns (default align).
-  -p --pathonly  output only the matching filenames, flat list ad string (or list if -l is set).
-  -l --list      if -o is set, switch to list (\\n separated) output instead flat list.
-  -d --debug     print the command to execute in the command line and the passed arguments and do not execute the actual command.
-  -h --help      show help.
-  -v --version   show version.
+  -f --fullpath     output full file path (default fullpath).
+  -n --noalign      aligh the output in columns (default align).
+  -p --pathonly     output only the matching filenames, flat list ad string (or list if -l is set).
+  -l --list         if -o is set, switch to list (\\n separated) output instead flat list, requires -p.
+  -d --debug        print the command to execute in the command line and the passed arguments and do not execute the actual command.
+  -e --errorformat  produce output compatible with vim errorformat for quickfix window, implies -f and -n.
+  -h --help         show help.
+  -v --version      show version.
 """
 from __future__ import print_function
 from docopt import docopt
+import os
 import subprocess
 import yaml
 
@@ -51,16 +52,23 @@ if __name__ == '__main__':
     # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # basepath = pro.communicate()[0].split('\n')[0]
 
-    basepath = './notes/'
+    # this is needed to get the real absolute path.
+    basepath = os.path.dirname(os.path.abspath(__file__))+'/notes/'
 
-    tmp_cmd = " grep '^\s*tags :' %s*.md | sed -E -e 's/:tags//' " % (basepath)
+    linenumber = ''
+    if arguments['--errorformat']:
+        linenumber = '-n'
+        arguments['--fullpath'] = True
+        arguments['--noalign'] = True
+
+    tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
 
     if len(arguments['<tags>']) != 0:
-        tmp_cmd = tmp_cmd + ''.join([" -e '/^.* : .*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.* : .*"+ar+".*/!d'" for ar in arguments['<tags>']])
+        tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.*:.*"+ar+".*/!d'" for ar in arguments['<tags>']])
 
     if arguments['--debug']:
         print('------------------')
-        print('command to execute:', tmp_cmd)
+        print('command to execute:', repr(tmp_cmd))
         print('------------------')
         print('arguments:')
         print(arguments)
@@ -69,13 +77,13 @@ if __name__ == '__main__':
     else:
 
         dict_data = extract_tags(tmp_cmd, len(basepath), arguments)
-        if len(dict_data) != 0:               # not results in output
+        if len(dict_data) != 0:                   # not results in output
             if not arguments['--pathonly']:       # only path == True
                 if not arguments['--noalign']:    # noalign == True
                     max_keys_len = len(max(dict_data, key=len))
                     print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
                 else:                             # noalign == True
-                    print('\n'.join('{:<s} : {}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
+                    print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
             else:                                 # only path == False
                 if not arguments['--list']:       # list == True
                     print(' '.join(dict_data.keys()))
