@@ -8,6 +8,18 @@ Tags with ! prepended are delete from result.
 
 WARNING: please, no `:` in filename , this mess up with the yaml format.
 
+For a test run, execute 
+
+    python generate_random_notes.py
+
+this generates 50 random notes in the `notes/` subfolder.
+
+Then use 
+
+    ./tagsearch -h
+
+for the documentation.
+
 ## Tagsearch.vim
 
 in your .vimrc set the path to the script
