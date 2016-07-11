@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+
 import random
 import yaml
 
-tags_bag = ['spaces',  'bar',  'test',  'foo',  'dog',  'python',  '42',  'fish',  'Monty']
+tags_bag = ['spaces',  'bar',  'test',  'foo',  'dog',  'python',  '42',  'fish',  'Monty', 'spam']
 
 n_notes = 50
 

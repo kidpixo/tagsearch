@@ -10,15 +10,26 @@ WARNING: please, no `:` in filename , this mess up with the yaml format.
 
 For a test run, execute 
 
-    python generate_random_notes.py
+```bash
+$ ./generate_random_notes.py
 
-this generates 50 random notes in the `notes/` subfolder.
+$ ./tagsearch.py foo bar
+notes 18.md : ['foo', 'bar', 'dog', 'Monty', 'test']
+notes 5.md  : ['foo', 'bar', 'Monty', 'spaces', 'test']
+notes 41.md : ['foo', 'spaces', 'bar', 'test', 'spam']
+notes 20.md : ['bar', '42', 'spaces', 'dog', 'foo']
+```
 
-Then use 
+this generates 50 random notes in the `notes/` subfolder, then search for all the notes with foo AND bar in the tags.
+The notes are randomly generated, your result may vary.
 
-    ./tagsearch -h
+For edit in vim, pipe the result in vim from shell (bash):
 
-for the documentation.
+```bash
+$ vim -q <(./tagsearch.py -e foo bar test Monty)
+```
+
+or use the  [vim command](#markdown-header-tagsearchvim) below.
 
 ## Tagsearch.vim
 
@@ -35,6 +46,7 @@ endfunction
 command!  -nargs=* Tagsearch call Tagsearch(<f-args>)
 ```
 
+
 This define the command `Tagsearch` that could be called as:
 
     :Tagsearch foo bar
@@ -49,7 +61,7 @@ Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpair
 
 ## Example file
 
-```markdown
+```markdown|
 ---
 tags : [test, Monty]
 ---
