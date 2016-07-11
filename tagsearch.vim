@@ -1,13 +1,13 @@
 "== Tagsearch 
-" path to the script
-let g:tagsearchcmd = "~/Downloads/github_cloned/tagsearch/tagsearch.py"
-
+" path to the tagsearch.py script
+let g:tagsearchcmd = "~/supersectrepath/tagsearch.py"
 function Tagsearch(...)
-    "echom system(g:tagsearchcmd . " -enf  ". a:1)
-    " populate the quickfix and don't jump at the first error
-    cgete system(g:tagsearchcmd . " -enf  ". a:1)
-    cw " show quickfix window already
+    cgete system(g:tagsearchcmd . " -e " . join(a:000,' '))  " populate quickfix and don't jump
+    cw " show quickfix window
 endfunction
 
+" define a command to humanize function call
+command!  -nargs=* Tagsearch call Tagsearch(<f-args>)
+
 " function called as:
-" :call Tagsearch("foo bar")
+" :Tagsearch foo bar

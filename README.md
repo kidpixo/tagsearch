@@ -22,22 +22,24 @@ for the documentation.
 
 ## Tagsearch.vim
 
-in your .vimrc set the path to the script
+in your .vimrc set the path to the script (or source tagsearch.vim)
 
 ```vim
+" path to the tagsearch.py script
 let g:tagsearchcmd = "~/supersectrepath/tagsearch.py"
 function Tagsearch(...)
-    "echom system(g:tagsearchcmd . " -enf  ". a:1)
-    " populate the quickfix and don't jump at the first error
-    cgete system(g:tagsearchcmd . " -enf  ". a:1)
-    cw " show quickfix window already
+    cgete system(g:tagsearchcmd . " -enf " . join(a:000,' '))  " populate quickfix and don't jump
+    cw " show quickfix window
 endfunction
+" define a command to humanize function call
+command!  -nargs=* Tagsearch call Tagsearch(<f-args>)
 ```
-This define the function Tagsearch tha could be called as:
 
-    call Tagsearch("foo bar")
+This define the command `Tagsearch` that could be called as:
 
-This will execute tagsearch.py wiht `"foo bar"` as arguments and populate the 
+    :Tagsearch foo bar
+
+This will execute tagsearch.py wiht `-e "foo bar"` as arguments and populate the 
 quickfix window with the results without jumping to the first.
 
 The it will open the quickfix window.
