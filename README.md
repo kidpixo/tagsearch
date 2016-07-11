@@ -23,17 +23,17 @@ notes 20.md : ['bar', '42', 'spaces', 'dog', 'foo']
 this generates 50 random notes in the `notes/` subfolder, then search for all the notes with foo AND bar in the tags.
 The notes are randomly generated, your result may vary.
 
-For edit in vim, pipe the result in vim from shell (bash):
+To edit the matching files in vim, pipe the result in vim quickfix directly from shell (bash):
 
 ```bash
-$ vim -q <(./tagsearch.py -e foo bar test Monty)
+$ vim -q <(./tagsearch.py -e foo bar)
 ```
 
-or use the  [vim command](#markdown-header-tagsearchvim) below.
+or use the  `Tagsearch` [command](#markdown-header-tagsearchvim) below directly in vim.
 
 ## Tagsearch.vim
 
-in your .vimrc set the path to the script (or source tagsearch.vim)
+Add this in your .vimrc (or source tagsearch.vim) and set the path to the script 
 
 ```vim
 " path to the tagsearch.py script
@@ -46,18 +46,16 @@ endfunction
 command!  -nargs=* Tagsearch call Tagsearch(<f-args>)
 ```
 
-
-This define the command `Tagsearch` that could be called as:
+This define the command `Tagsearch` that could be called as
 
     :Tagsearch foo bar
 
-This will execute tagsearch.py wiht `-e "foo bar"` as arguments and populate the 
+This will execute tagsearch.py wiht `-e foo bar` as arguments and populate the 
 quickfix window with the results without jumping to the first.
 
 The it will open the quickfix window.
 
 Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) (pairs of handy bracket mappings) you could navigate the results with `]q` (:cnext) and `[q]` ( :cprevious ).
-
 
 ## Example file
 
