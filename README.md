@@ -59,7 +59,7 @@ Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpair
 
 ## Example file
 
-```markdown|
+```markdown
 ---
 tags : [test, Monty]
 ---
