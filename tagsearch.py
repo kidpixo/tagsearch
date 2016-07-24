@@ -4,6 +4,13 @@
 Witouht any paramter, list all the files and tags.
 Tags with ! prepended are delete from result.
 
+Basics:
+
+  tagsearch.py foo !bar
+
+search for all notes containing tag `foo` and exclude all with of `bar`,
+repeat the tags at will.
+
 Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
@@ -30,16 +37,19 @@ import yaml
 
 def extract_tags(cmd, basepath_len, arguments):
     pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    data = pro.communicate()[0].split('\n')
+    data = pro.communicate()[0].split(b'\n')
+
+    dict_data = {}
 
     if not (len(data) == 1) or (bool(data[0])):
-        if arguments['--fullpath']:
-            dict_data = {yaml.load(d).keys()[0]: yaml.load(d)[yaml.load(d).keys()[0]] for d in data if d is not ''}
-        else:
-            dict_data = {yaml.load(d).keys()[0][basepath_len:]: yaml.load(d)[yaml.load(d).keys()[0]] for d in data if d is not ''}
-    else:
-        dict_data = {}
-
+        for d in data:
+            if d != b'' and d != '':
+                _dict = yaml.load(d)
+                _key = list(_dict.keys())[0]
+                _value = _dict[_key]
+                if not arguments['--fullpath']:
+                    _key = _key[basepath_len:]
+                dict_data[_key] = _value
     return dict_data
 
 
