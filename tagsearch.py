@@ -4,6 +4,13 @@
 Witouht any paramter, list all the files and tags.
 Tags with ! prepended are delete from result.
 
+Basics:
+
+  tagsearch.py foo !bar
+
+search for all notes containing tag `foo` and exclude all with of `bar`,
+repeat the tags at will.
+
 Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
