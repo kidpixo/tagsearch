@@ -1,12 +1,22 @@
 # Tagsearch.py
 
-The script lists all tags from yaml in text files.
+This script search across all tags in yaml header in text files in a directory, default is in ~/.notes/ .
+The idea is to store metadata in a simple text file to edit it with the editor of your choice.
 
-Witouht any paramter, list all the files and tags.
+A workflow is to search for a tag(s) and pipe the resulting filelist in a text editor. 
+
+Below a [vim-script](#tagsearch.vim) function example.
+
+Without any parameter, list all the files and tags.
 
 Tags with ! prepended are delete from result.
 
-WARNING: please, no `:` in filename , this mess up with the yaml format.
+A technical note: the script is essentially a python wrapper around a grep+sed pipe and it work well only for one yaml block in the document and if there aren't line similar to yaml tags. 
+
+### WARNING: 
+
+1. please, no `:` in filename , this mess up with the yaml format.
+2. the actual script relies on grep and sed, if this isn't availabe on your system you are out of luck. I'm planning a pure python solution, if benchmarks will be good.
 
 For a test run, execute 
 
