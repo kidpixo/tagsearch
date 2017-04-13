@@ -35,11 +35,13 @@ import subprocess
 import yaml
 
 
-def extract_tags(cmd, basepath_len, arguments):
+def extract_tags(cmd, basepath_len, arguments_inner):
+    """ Extract tags from commandline to dict
+    """
     pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     data = pro.communicate()[0].split(b'\n')
 
-    dict_data = {}
+    dict_data_inner = {}
 
     if not (len(data) == 1) or (bool(data[0])):
         for d in data:
@@ -47,10 +49,10 @@ def extract_tags(cmd, basepath_len, arguments):
                 _dict = yaml.load(d)
                 _key = list(_dict.keys())[0]
                 _value = _dict[_key]
-                if not arguments['--fullpath']:
+                if not arguments_inner['--fullpath']:
                     _key = _key[basepath_len:]
-                dict_data[_key] = _value
-    return dict_data
+                dict_data_inner[_key] = _value
+    return dict_data_inner
 
 
 if __name__ == '__main__':
@@ -65,7 +67,7 @@ if __name__ == '__main__':
     # this is needed to get the real absolute path.
     # basepath = os.path.dirname(os.path.abspath(__file__))+'/.notes/'
     # assuming notes are in  ~/.notes/
-    basepath =  os.path.expanduser('~/.notes/')
+    basepath = os.path.expanduser('~/.notes/')
 
     # check if basepath, if not break the program.
     if os.path.isdir(basepath):
@@ -79,7 +81,7 @@ if __name__ == '__main__':
         tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
 
         if len(arguments['<tags>']) != 0:
-            tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.*:.*"+ar+".*/!d'" for ar in arguments['<tags>']])
+            tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*" + ar[1:] + ".*/d'" if ar[0] == "!" else " -e '/^.*:.*" + ar + ".*/!d'" for ar in arguments['<tags>']])
 
         if arguments['--debug']:
             print('------------------')
