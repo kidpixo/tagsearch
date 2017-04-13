@@ -63,39 +63,48 @@ if __name__ == '__main__':
     # basepath = pro.communicate()[0].split('\n')[0]
 
     # this is needed to get the real absolute path.
-    basepath = os.path.dirname(os.path.abspath(__file__))+'/notes/'
+    # basepath = os.path.dirname(os.path.abspath(__file__))+'/.notes/'
+    # assuming notes are in  ~/.notes/
+    basepath =  os.path.expanduser('~/.notes/')
 
-    linenumber = ''
-    if arguments['--errorformat']:
-        linenumber = '-n'
-        arguments['--fullpath'] = True
-        arguments['--noalign'] = True
+    # check if basepath, if not break the program.
+    if os.path.isdir(basepath):
 
-    tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
+        linenumber = ''
+        if arguments['--errorformat']:
+            linenumber = '-n'
+            arguments['--fullpath'] = True
+            arguments['--noalign'] = True
 
-    if len(arguments['<tags>']) != 0:
-        tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.*:.*"+ar+".*/!d'" for ar in arguments['<tags>']])
+        tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
 
-    if arguments['--debug']:
-        print('------------------')
-        print('command to execute:', repr(tmp_cmd))
-        print('------------------')
-        print('arguments:')
-        print(arguments)
-        print('------------------')
+        if len(arguments['<tags>']) != 0:
+            tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.*:.*"+ar+".*/!d'" for ar in arguments['<tags>']])
 
+        if arguments['--debug']:
+            print('------------------')
+            print('command to execute:', repr(tmp_cmd))
+            print('------------------')
+            print('arguments:')
+            print(arguments)
+            print('------------------')
+
+        else:
+
+            dict_data = extract_tags(tmp_cmd, len(basepath), arguments)
+            if len(dict_data) != 0:                   # not results in output
+                if not arguments['--pathonly']:       # only path == True
+                    if not arguments['--noalign']:    # noalign == True
+                        max_keys_len = len(max(dict_data, key=len))
+                        print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
+                    else:                             # noalign == True
+                        print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
+                else:                                 # only path == False
+                    if not arguments['--list']:       # list == True
+                        print(' '.join(dict_data.keys()))
+                    else:                             # list == False
+                        print('\n'.join(dict_data.keys()))
     else:
-
-        dict_data = extract_tags(tmp_cmd, len(basepath), arguments)
-        if len(dict_data) != 0:                   # not results in output
-            if not arguments['--pathonly']:       # only path == True
-                if not arguments['--noalign']:    # noalign == True
-                    max_keys_len = len(max(dict_data, key=len))
-                    print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
-                else:                             # noalign == True
-                    print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
-            else:                                 # only path == False
-                if not arguments['--list']:       # list == True
-                    print(' '.join(dict_data.keys()))
-                else:                             # list == False
-                    print('\n'.join(dict_data.keys()))
+        import sys
+        print('ERROR: notes directory at path:"%s" does not exist !!!!' % basepath, file=sys.stderr)
+        sys.exit(1)
