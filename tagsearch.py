@@ -28,7 +28,6 @@ Options:
   -h --help         show help.
   -v --version      show version.
 """
-from __future__ import print_function
 from docopt import docopt
 import os
 import subprocess
@@ -64,7 +63,7 @@ if __name__ == '__main__':
 
     # this is needed to get the real absolute path.
     basepath = os.path.dirname(os.path.abspath(__file__))+'/notes/'
-
+    print(basepath)
     linenumber = ''
     if arguments['--errorformat']:
         linenumber = '-n'
