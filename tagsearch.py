@@ -98,9 +98,9 @@ if __name__ == '__main__':
                 if not arguments['--pathonly']:       # only path == True
                     if not arguments['--noalign']:    # noalign == True
                         max_keys_len = len(max(dict_data, key=len))
-                        print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
+                        print('\n'.join('{:<{}s} : {}'.format(k, max_keys_len, v) for k, v in dict_data.items()))
                     else:                             # noalign == True
-                        print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
+                        print('\n'.join('{:<s}:{}'.format(k, v) for k, v in dict_data.items()))
                 else:                                 # only path == False
                     if not arguments['--list']:       # list == True
                         print(' '.join(dict_data.keys()))
