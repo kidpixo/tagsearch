@@ -38,7 +38,8 @@ import yaml
 def extract_tags(cmd, basepath_len, arguments_inner):
     """ Extract tags from commandline to dict
     """
-    pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pro = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     data = pro.communicate()[0].split(b'\n')
 
     dict_data_inner = {}
@@ -61,7 +62,10 @@ if __name__ == '__main__':
     # I usually put the folder somewhere (drive, dropbox) and symlynk in my
     # home. This way, one path rules them all.
     # basepath_encoded = '$HOME/.notes/'
-    # pro = subprocess.Popen('echo '+basepath_encoded, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # pro = subprocess.Popen('echo '+basepath_encoded,
+    #                         shell=True,
+    #                         stdout=subprocess.PIPE,
+    #                         stderr=subprocess.PIPE)
     # basepath = pro.communicate()[0].split('\n')[0]
 
     # this is needed to get the real absolute path.
@@ -78,10 +82,14 @@ if __name__ == '__main__':
             arguments['--fullpath'] = True
             arguments['--noalign'] = True
 
-        tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
+        tmp_cmd = "grep %s '^\s*tags :' %s*.md | "
+        "sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
 
         if len(arguments['<tags>']) != 0:
-            tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*" + ar[1:] + ".*/d'" if ar[0] == "!" else " -e '/^.*:.*" + ar + ".*/!d'" for ar in arguments['<tags>']])
+            tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*" + ar[1:] + ".*/d'" if
+                                         ar[0] == "!" else " -e '/^.*:.*" +
+                                         ar + ".*/!d'"
+                                         for ar in arguments['<tags>']])
 
         if arguments['--debug']:
             print('------------------')
@@ -98,9 +106,13 @@ if __name__ == '__main__':
                 if not arguments['--pathonly']:       # only path == True
                     if not arguments['--noalign']:    # noalign == True
                         max_keys_len = len(max(dict_data, key=len))
-                        print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
+                        print('\n'.join('{:<{}s} : {}'.format(
+                            k.encode('utf-8'), max_keys_len, v) for
+                                    k, v in dict_data.iteritems()))
                     else:                             # noalign == True
-                        print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
+                        print('\n'.join('{:<s}:{}'.format(
+                            k.encode('utf-8'), v) for k, v in
+                                         dict_data.iteritems()))
                 else:                                 # only path == False
                     if not arguments['--list']:       # list == True
                         print(' '.join(dict_data.keys()))
@@ -108,5 +120,6 @@ if __name__ == '__main__':
                         print('\n'.join(dict_data.keys()))
     else:
         import sys
-        print('ERROR: notes directory at path:"%s" does not exist !!!!' % basepath, file=sys.stderr)
+        print('ERROR: notes directory at path:"%s" does not exist !!!!' %
+              basepath, file=sys.stderr)
         sys.exit(1)
