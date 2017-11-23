@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/Users/damo_ma/.virtualenvs/yamlfrontmatter/bin/python
 """list all tags from yaml in text files.
 
 Witouht any paramter, list all the files and tags.
@@ -36,7 +36,8 @@ import yaml
 
 
 def extract_tags(cmd, basepath_len, arguments):
-    pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pro = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     data = pro.communicate()[0].split(b'\n')
 
     dict_data = {}
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     # basepath = pro.communicate()[0].split('\n')[0]
 
     # this is needed to get the real absolute path.
-    basepath = os.path.dirname(os.path.abspath(__file__))+'/notes/'
+    basepath = os.path.dirname(os.path.abspath(__file__)) + '/notes/'
 
     linenumber = ''
     if arguments['--errorformat']:
@@ -71,10 +72,12 @@ if __name__ == '__main__':
         arguments['--fullpath'] = True
         arguments['--noalign'] = True
 
-    tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (linenumber, basepath)
+    tmp_cmd = "grep %s '^\s*tags :' %s*.md | sed -E -e 's/:tags.*:*.\[/ : [/' " % (
+        linenumber, basepath)
 
     if len(arguments['<tags>']) != 0:
-        tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*"+ar[1:]+".*/d'" if ar[0] == "!" else " -e '/^.*:.*"+ar+".*/!d'" for ar in arguments['<tags>']])
+        tmp_cmd = tmp_cmd + ''.join([" -e '/^.*:.*" + ar[1:] + ".*/d'" if ar[
+                                    0] == "!" else " -e '/^.*:.*" + ar + ".*/!d'" for ar in arguments['<tags>']])
 
     if arguments['--debug']:
         print('------------------')
@@ -91,9 +94,11 @@ if __name__ == '__main__':
             if not arguments['--pathonly']:       # only path == True
                 if not arguments['--noalign']:    # noalign == True
                     max_keys_len = len(max(dict_data, key=len))
-                    print('\n'.join('{:<{}s} : {}'.format(k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
+                    print('\n'.join('{:<{}s} : {}'.format(
+                        k.encode('utf-8'), max_keys_len, v) for k, v in dict_data.iteritems()))
                 else:                             # noalign == True
-                    print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v) for k, v in dict_data.iteritems()))
+                    print('\n'.join('{:<s}:{}'.format(k.encode('utf-8'), v)
+                                    for k, v in dict_data.iteritems()))
             else:                                 # only path == False
                 if not arguments['--list']:       # list == True
                     print(' '.join(dict_data.keys()))
