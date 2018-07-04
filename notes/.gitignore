@@ -1,5 +1,0 @@
-# this ignore folder content, but leaves tge folder in the repo
-*
-
-!.gitignore
-
