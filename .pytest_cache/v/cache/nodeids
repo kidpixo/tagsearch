@@ -1,0 +1,6 @@
+[
+  "tagsearch/test_tagsearch.py::test_data_base_path_checker",
+  "tagsearch/test_tagsearch.py::test_load_data_to_tinydb",
+  "tagsearch/test_tagsearch.py::test_query_db",
+  "tagsearch/test_tagsearch.py::test_print_results"
+]
