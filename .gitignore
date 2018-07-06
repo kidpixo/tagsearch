@@ -1,5 +1,5 @@
 # Created by https://www.gitignore.io/api/python,osx
-.pytest_cache
+.pytest_cache/
 
 ### Vim ###
 # swap
