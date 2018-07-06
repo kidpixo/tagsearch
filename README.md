@@ -32,7 +32,7 @@ You can of course use them, but this will interfere with the aim of theese tags:
 search form ill formatted files, files without `tags` key or any tag.
 
 ### Test Run
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
 For a test run, execute 
 
@@ -58,7 +58,7 @@ $ vim -q <(./tagsearch.py -e foo bar)
 or use the  `Tagsearch` [command](#markdown-header-tagsearchvim) below directly in vim.
 
 ## Tagsearch.vim
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
 Add this in your .vimrc (or source tagsearch.vim) and set the path to the script 
 
@@ -85,7 +85,7 @@ The it will open the quickfix window.
 Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) (pairs of handy bracket mappings) you could navigate the results with `]q` (:cnext) and `[q]` ( :cprevious ).
 
 ## Example file
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
 ```markdown
 ---
@@ -101,20 +101,20 @@ auctor dignissim. In id.
 ```
 
 ## Use from Commandline
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
 This is the [docopt](http://docopt.org/) documentation from the main script
 `tagsearch/tagsearch`
 
 ### Basics
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
     tagsearch foo !bar
 
 Returns  all files containing tag `foo` and exclude all with of `bar`.
 
 ### Usage
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
     tagsearch.py
     tagsearch.py [<tags>...]
@@ -123,7 +123,7 @@ Returns  all files containing tag `foo` and exclude all with of `bar`.
     tagsearch.py -v | --version
 
 ### Options
-[^top](#markdown-header-tagsearch.py)
+[^top](#markdown-header-tagsearchpy)
 
     -f --fullpath     output full file path (default False).
     -a --align        aligh the output in columns (default False).
