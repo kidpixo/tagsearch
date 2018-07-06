@@ -81,7 +81,7 @@ def query_db(arg_tags,db):
 
     """
     # this is far more quick for empty input or just one empty string, just return everything
-    if len(arg_tags) == 1 and '' in arg_tags[0]:
+    if len(arg_tags) == 1 and '' ==  arg_tags[0]:
         return None
     if arg_tags:
         import tinydb as tdb

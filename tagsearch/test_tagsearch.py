@@ -22,14 +22,13 @@ def test_load_data_to_tinydb():
     data_base_path = pathlib.Path(tagsearch.__file__).parent / 'notes'
     db = tagsearch.functions.load_data_to_tinydb(data_base_path)
     # expected value
-    result_all = [{'tags': [''],
-                  'file': data_base_path / 'notes 2.md'},
-                 {'tags': ['foo'],
-                  'file': data_base_path /'notes 3.md'},
-                 {'tags': ['test', 'dog', 'bar', 'fish', '42'],
-                  'file': data_base_path /'notes 4.md'},
-                 {'tags': ['foo', 'spam', 'bar', 'test'],
-                  'file': data_base_path /'notes 5.md'}]
+    result_all = [
+                 {'tags': ['nofrontmatter']                   , 'file': data_base_path / 'notes 0.md'},
+                 {'tags': ['notagskey']                       , 'file': data_base_path / 'notes 1.md', 'test': 'this is anoter key'},
+                 {'tags': ['tagsempty']                       , 'file': data_base_path / 'notes 2.md'},
+                 {'tags': ['foo']                             , 'file': data_base_path /'notes 3.md'},
+                 {'tags': ['test', 'dog', 'bar', 'fish', '42'], 'file': data_base_path /'notes 4.md'},
+                 {'tags': ['foo', 'spam', 'bar', 'test']      , 'file': data_base_path /'notes 5.md'}]
     assert db.all() == result_all
 
 def test_query_db():

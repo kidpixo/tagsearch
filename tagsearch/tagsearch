@@ -2,6 +2,7 @@
 # vim: filetype=python tabstop=8 expandtab shiftwidth=4 softtabstop=4
 # -*- coding: utf-8 -*-
 """Search all tags from yaml frontmatter in text files.
+Files location is in the TAGSEARCH_HOME variable or $HOME/.notes.
 Witouht any paramter, list all the files and tags.
 A !TAG exclude TAG from result.
 
