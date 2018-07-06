@@ -3,7 +3,7 @@ import yaml
 
 tags_bag = ['spaces',  'bar',  'test',  'foo',  'dog',  'python',  '42',  'fish',  'Monty', 'spam']
 
-n_notes = 10
+n_notes = 50
 
 outtext = '''
 # Lorem ipsum dolor sit amet
