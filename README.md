@@ -11,12 +11,16 @@ Without any parameter, list all the files and tags.
 
 Tags with ! prepended are delete from result.
 
-A technical note: the script is essentially a python wrapper around a grep+sed pipe and it work well only for one yaml block in the document and if there aren't line similar to yaml tags. 
+Some special tags are reserved for internal use:
+
+- `nofrontmatter` : files without frontmatter 
+- `notagskey` : files without `tags` key
+- `tagsempty` : files with empty in `tags` array
+
+You can of course use them, but this will interfere with the aim of theese tags:
+search form ill formatted files, files without `tags` key or any tag.
 
 ### WARNING: 
-
-1. please, no `:` in filename , this mess up with the yaml format.
-2. the actual script relies on grep and sed, if this isn't availabe on your system you are out of luck. I'm planning a pure python solution, if benchmarks will be good.
 
 For a test run, execute 
 
@@ -49,7 +53,7 @@ Add this in your .vimrc (or source tagsearch.vim) and set the path to the script
 " path to the tagsearch.py script
 let g:tagsearchcmd = "~/supersectrepath/tagsearch.py"
 function Tagsearch(...)
-    cgete system(g:tagsearchcmd . " -enf " . join(a:000,' '))  " populate quickfix and don't jump
+    cgete system(g:tagsearchcmd . " -ef " . join(a:000,' '))  " populate quickfix and don't jump
     cw " show quickfix window
 endfunction
 " define a command to humanize function call
@@ -82,21 +86,35 @@ auctor dignissim. In id.
 
 ```
 
-## Usage
+## Using it
 
-- tagsearch.py
-- tagsearch.py [<tags>...]
-- tagsearch.py [-dfne] [-p | -pl] [<tags>...]
-- tagsearch.py -h | --help
-- tagsearch.py -v | --version
+This is the [docopt](http://docopt.org/) documentation from the main script
+`tagsearch/tagsearch`
 
-## Options
+### Basics
 
-- **-f --fullpath**    : output full file path (default fullpath).
-- **-n --noalign**     : aligh the output in columns (default align).
-- **-p --pathonly**    : output only the matching filenames, flat list ad string (or list if -l is set).
-- **-l --list**        : if -o is set, switch to list (\n separated) output instead flat list, requires -p.
-- **-d --debug**       : print the command to execute in the command line and the passed arguments and do not execute the actual command.
-- **-e --errorformat** : produce output compatible with vim errorformat for quickfix window, implies -f and -n.
-- **-h --help**        : show help.
-- **-v --version**     : show version.
+    tagsearch foo !bar
+
+Returns  all files containing tag `foo` and exclude all with of `bar`.
+
+### Usage
+
+    tagsearch.py
+    tagsearch.py [<tags>...]
+    tagsearch.py [-faescd] [-p | -pl] [<tags>...]
+    tagsearch.py -h | --help
+    tagsearch.py -v | --version
+
+### Options
+
+    -f --fullpath     output full file path (default False).
+    -a --align        aligh the output in columns (default False).
+    -p --pathonly     output only the filenames
+    -t --tagsonly     output only the unique tags
+    -l --list         flat list output, requires -p|--pathhonly or -t|--tagsonly.
+    -e --errorformat  output vim errorformat `%f:%l:%m` for quickfix, implies -f|--fullpath.
+    -s --escape       escape the filenames with " to protect whitespaces
+    -c --check        check if all data contains frontmatter and, a 'tags' entry, if tags is a list, TODO
+    -d --debug        print the command to execute in the command line and the passed arguments and do not execute the actual command.
+    -h --help         show help.
+    -v --version      show version.

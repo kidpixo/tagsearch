@@ -2,7 +2,7 @@
 " path to the tagsearch.py script
 let g:tagsearchcmd = "~/supersectrepath/tagsearch.py"
 function Tagsearch(...)
-    cgete system(g:tagsearchcmd . " -e " . join(a:000,' '))  " populate quickfix and don't jump
+    cgete system(g:tagsearchcmd . " -ef " . join(a:000,' '))  " populate quickfix and don't jump
     cw " show quickfix window
 endfunction
 
