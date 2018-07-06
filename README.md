@@ -2,13 +2,13 @@
 
 # Table Of Content
 
-- [Test Run](#test-run)
-- [Tagsearch.vim](#tagsearch.vim)
-- [Example file](#example-file)
-- [Use from Commandline](#use-from-commandline)
-    - [Basics](#basics)
-    - [Usage](#usage)
-    - [Options](#options)
+- [Test Run](#markdown-header-test-run)
+- [Tagsearch.vim](#markdown-header-tagsearch.vim)
+- [Example file](#markdown-header-example-file)
+- [Use from Commandline](#markdown-header-use-from-commandline)
+    - [Basics](#markdown-header-basics)
+    - [Usage](#markdown-header-usage)
+    - [Options](#markdown-header-options)
 
 
 This script search across all tags in yaml header in text files in a directory, default is in ~/.notes/ .
@@ -16,7 +16,7 @@ The idea is to store metadata in a simple text file to edit it with the editor o
 
 A workflow is to search for a tag(s) and pipe the resulting filelist in a text editor. 
 
-Below a [vim-script](#tagsearch.vim) function example.
+Below a [vim-script](#markdown-header-tagsearch.vim) function example.
 
 Without any parameter, list all the files and tags.
 
@@ -32,7 +32,7 @@ You can of course use them, but this will interfere with the aim of theese tags:
 search form ill formatted files, files without `tags` key or any tag.
 
 ### Test Run
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
 For a test run, execute 
 
@@ -58,7 +58,7 @@ $ vim -q <(./tagsearch.py -e foo bar)
 or use the  `Tagsearch` [command](#markdown-header-tagsearchvim) below directly in vim.
 
 ## Tagsearch.vim
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
 Add this in your .vimrc (or source tagsearch.vim) and set the path to the script 
 
@@ -85,7 +85,7 @@ The it will open the quickfix window.
 Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) (pairs of handy bracket mappings) you could navigate the results with `]q` (:cnext) and `[q]` ( :cprevious ).
 
 ## Example file
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
 ```markdown
 ---
@@ -101,20 +101,20 @@ auctor dignissim. In id.
 ```
 
 ## Use from Commandline
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
 This is the [docopt](http://docopt.org/) documentation from the main script
 `tagsearch/tagsearch`
 
 ### Basics
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
     tagsearch foo !bar
 
 Returns  all files containing tag `foo` and exclude all with of `bar`.
 
 ### Usage
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
     tagsearch.py
     tagsearch.py [<tags>...]
@@ -123,7 +123,7 @@ Returns  all files containing tag `foo` and exclude all with of `bar`.
     tagsearch.py -v | --version
 
 ### Options
-[\^top](#tagsearch.py)
+[^top](#markdown-header-tagsearch.py)
 
     -f --fullpath     output full file path (default False).
     -a --align        aligh the output in columns (default False).
