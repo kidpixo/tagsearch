@@ -14,15 +14,16 @@ Returns  all files containing tag `foo` and exclude all with of `bar`.
 Usage:
   tagsearch.py
   tagsearch.py [<tags>...]
-  tagsearch.py [-faescd] [-p | -pl] [<tags>...]
+  tagsearch.py [-faescd] [-p | -pl] [-t | -tl] [<tags>...]
   tagsearch.py -h | --help
   tagsearch.py -v | --version
 
 Options:
   -f --fullpath     output full file path (default False).
   -a --align        aligh the output in columns (default False).
-  -p --pathonly     output only the matching filenames
-  -l --list         flat list output, requires -p|--pathhonly.
+  -p --pathonly     output only the filenames
+  -t --tagsonly     output only the unique tags
+  -l --list         flat list output, requires -p|--pathhonly or -t|--tagsonly.
   -e --errorformat  output vim errorformat `%f:%l:%m` for quickfix, implies -f|--fullpath.
   -s --escape       escape the filenames with " to protect whitespaces
   -c --check        check if all data contains frontmatter and, a 'tags' entry, if tags is a list, TODO
@@ -69,9 +70,3 @@ if __name__ == '__main__':
     #  input : result of query + parsed user option 
     # output : print formatted results
     tagsearch.functions.print_results(arguments, result)
-
-
-# # get all uniques tags
-# import itertools
-# all_tags = set(itertools.chain(*[row['tags'] for row in result if 'tags' in row]))
-# all_tags.discard('')

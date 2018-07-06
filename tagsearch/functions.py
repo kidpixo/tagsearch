@@ -50,11 +50,18 @@ def load_data_to_tinydb(data_base_path):
     for file in data_base_path.rglob('*md'):
         with file.open() as f:
             metadata, content = frontmatter.parse(f.read())
-            if 'tags' in metadata:
-                if len(metadata['tags']) == 0:
-                   metadata['tags'] = ['']
-                metadata['file'] = file
-                metadatas.append(metadata)
+            if metadata: # frontamatter present
+                if 'tags' in metadata: # tag key present in frontmatter
+                    if len(metadata['tags']) == 0: # not values in tags
+                       metadata['tags'] = ['tagsempty']
+                else: # no tags key in frontmatter
+                       metadata['tags'] = ['notagskey']
+            else: # frontamatter nor tag key present
+                metadata['tags'] = ['nofrontmatter']
+
+            metadata['file'] = file
+            metadatas.append(metadata)
+
     tmp = db.insert_multiple(metadatas)
     return db
 
@@ -112,21 +119,33 @@ def print_results(arguments, result):
     """
     # this does nothing if None or epmty result list is passed
     if result: 
-        show_path = lambda p: str(p) if arguments['--fullpath'] else p.name
 
-        escape_char = '"' if arguments['--escape'] else '' 
+        show_path = lambda p: str(p) if arguments['--fullpath'] else p.name
+        rows_sep = ' ' if arguments['--list'] else '\n' # this happens only if pathonly is set
+        newline_char = '\n' if arguments['--list'] else ' '
+        escape_char = '"' if arguments['--escape'] else ''
 
         if arguments['--pathonly']:
-            rows_sep = ' ' if arguments['--list'] else '\n' # this happens only if pathonly is set
             print(rows_sep.join(['{esc}{path}{esc}'.format(esc=escape_char,path=show_path(row['file'])) for row in result]))
             return 0
 
         if arguments['--errorformat']:
-            print('\n'.join(['{path}:1:{tags}'.format(path=show_path(row['file']),tags=row['tags']) for row in result]))
+            print(f'{rows_sep}'.join(['{path}:1:{tags}'.format(path=show_path(row['file']),tags=row['tags']) for row in result]))
             return 0
         
         # this happens if nothing else 
         max_file_field = max((len(show_path(row['file'])) for row in result)) if arguments['--align'] else 0
 
+        if arguments['--tagsonly']:
+            # get all uniques tags
+            import itertools
+            all_tags = set(itertools.chain(*[row['tags'] for row in result if 'tags' in row]))
+            # 
+            print(f'{rows_sep}'.join([f'{escape_char}{t}{escape_char}' if isinstance(t,str) else f'{escape_char}{str(t)}{escape_char}' for t in all_tags]))
+            return 0
+
         print('\n'.join(['{path:<{max}}:{tags}'.format(max=max_file_field, path=show_path(row['file']),tags=row['tags']) for row in result]))
         return 0
+
+
+

@@ -18,7 +18,8 @@ def test_data_base_path_checker():
 
 def test_load_data_to_tinydb():
     # tagsearch function
-    data_base_path = tagsearch.functions.data_base_path_checker('notes')
+    #TODO relative to install dir : does it work for zipped/eggs/wheels?
+    data_base_path = pathlib.Path(tagsearch.__file__).parent / 'notes'
     db = tagsearch.functions.load_data_to_tinydb(data_base_path)
     # expected value
     result_all = [{'tags': [''],
@@ -32,7 +33,11 @@ def test_load_data_to_tinydb():
     assert db.all() == result_all
 
 def test_query_db():
-    pass
+    # tagsearch function
+    #TODO relative to install dir : does it work for zipped/eggs/wheels?
+    data_base_path = pathlib.Path(tagsearch.__file__).parent / 'notes'
+    db = tagsearch.functions.load_data_to_tinydb(data_base_path)
+
 # result = tagsearch.functions.query_db(arguments['<tags>'], db)
 
 def test_print_results():
