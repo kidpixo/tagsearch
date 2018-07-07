@@ -120,23 +120,23 @@ def print_results(arguments, result):
     # this does nothing if None or epmty result list is passed
     if result: 
 
-        show_path = lambda p: str(p) if arguments['--fullpath'] else p.name
-        rows_sep = ' ' if arguments['--list'] else '\n' # this happens only if pathonly is set
-        newline_char = '\n' if arguments['--list'] else ' '
-        escape_char = '"' if arguments['--escape'] else ''
+        show_path = lambda p: str(p) if arguments.get('--fullpath') else p.name
+        rows_sep = ' ' if arguments.get('--list') else '\n' # this happens only if pathonly is set
+        newline_char = '\n' if arguments.get('--list') else ' '
+        escape_char = '"' if arguments.get('--escape') else ''
 
-        if arguments['--pathonly']:
+        if arguments.get('--pathonly'):
             print(rows_sep.join(['{esc}{path}{esc}'.format(esc=escape_char,path=show_path(row['file'])) for row in result]))
             return 0
 
-        if arguments['--errorformat']:
+        if arguments.get('--errorformat'):
             print(f'{rows_sep}'.join(['{path}:1:{tags}'.format(path=show_path(row['file']),tags=row['tags']) for row in result]))
             return 0
         
         # this happens if nothing else 
-        max_file_field = max((len(show_path(row['file'])) for row in result)) if arguments['--align'] else 0
+        max_file_field = max((len(show_path(row['file'])) for row in result)) if arguments.get('--align') else 0
 
-        if arguments['--tagsonly']:
+        if arguments.get('--tagsonly'):
             # get all uniques tags
             import itertools
             all_tags = set(itertools.chain(*[row['tags'] for row in result if 'tags' in row]))
