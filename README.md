@@ -11,10 +11,35 @@
     - [Options](#markdown-header-options)
 
 
-This script search across all tags in yaml header in text files in a directory, default is in ~/.notes/ .
-The idea is to store metadata in a simple text file to edit it with the editor of your choice.
+This script does one thing : search across all tags in yaml header in text files in
+a directory.
 
-A workflow is to search for a tag(s) and pipe the resulting filelist in a text editor. 
+The files location is stored in the shell variavle `TAGSEARCH_HOME` or the default 
+is `$HOME/.notes/` .
+
+The idea is to store metadata in a simple portable text file without any central db.
+
+The only drawback is that the data are reconstructed on the fly at each call, but on
+modern computer with a reasnoable number of file it takes less than 1 second.
+
+Some informal benchmarks on my laptop shows ~1.5s with 10000 files, 
+with a couple of hundreds the whole script runs in about ~0.5s.
+
+## Example file
+[^top](#markdown-header-tagsearchpy)
+
+```markdown
+---
+tags : [test, Monty]
+---
+
+# Lorem ipsum dolor sit amet
+
+Lorem ipsum dolor sit amet,  consectetur adipiscing elit. 
+Fusce consequat suscipit auctor. Quisque accumsan ex in 
+auctor dignissim. In id.
+
+```
 
 Below a [vim-script](#markdown-header-tagsearch.vim) function example.
 
@@ -24,12 +49,11 @@ Tags with ! prepended are delete from result.
 
 Some special tags are reserved for internal use:
 
-- `nofrontmatter` : files without frontmatter 
+- `nofrontmatter` : files without frontmatter (bad format)
 - `notagskey` : files without `tags` key
 - `tagsempty` : files with empty in `tags` array
 
-You can of course use them, but this will interfere with the aim of theese tags:
-search form ill formatted files, files without `tags` key or any tag.
+You can of course use them, but this will interfere with the aim of theese tags.
 
 ### Test Run
 [^top](#markdown-header-tagsearchpy)
@@ -37,9 +61,10 @@ search form ill formatted files, files without `tags` key or any tag.
 For a test run, execute 
 
 ```bash
-$ ./generate_random_notes.py
+$ cd utilites/
+$ python generate_random_notes.py
 
-$ ./tagsearch.py foo bar
+$ TAGSEARCH_HOME=$(pwd)/notes tagsearch foo bar
 notes 18.md : ['foo', 'bar', 'dog', 'Monty', 'test']
 notes 5.md  : ['foo', 'bar', 'Monty', 'spaces', 'test']
 notes 41.md : ['foo', 'spaces', 'bar', 'test', 'spam']
@@ -77,28 +102,22 @@ This define the command `Tagsearch` that could be called as
 
     :Tagsearch foo bar
 
-This will execute tagsearch.py wiht `-e foo bar` as arguments and populate the 
-quickfix window with the results without jumping to the first.
+This will :
 
-The it will open the quickfix window.
+- execute tagsearch.py wiht `-ef foo bar` as arguments
+- populate the quickfix window with the results without jumping
+- open the quickfix windowi
 
 Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) (pairs of handy bracket mappings) you could navigate the results with `]q` (:cnext) and `[q]` ( :cprevious ).
 
-## Example file
-[^top](#markdown-header-tagsearchpy)
+## Completion
 
-```markdown
----
-tags : [test, Monty]
----
+In `utilites/tagsearch_completion.bash` put a simple bash completion function.
 
-# Lorem ipsum dolor sit amet
+Now is just completing all the existing tags in your file list.
 
-Lorem ipsum dolor sit amet,  consectetur adipiscing elit. 
-Fusce consequat suscipit auctor. Quisque accumsan ex in 
-auctor dignissim. In id.
+Just source it in your .bashrc like `. tagsearch_completion.bash`
 
-```
 
 ## Use from Commandline
 [^top](#markdown-header-tagsearchpy)
