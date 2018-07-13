@@ -1,3 +1,4 @@
+import os
 import random
 import yaml
 
@@ -17,6 +18,9 @@ Lorem ipsum dolor sit amet,  consectetur adipiscing elit. Fusce consequat suscip
 - Donec aliquet felis ut orci viverra,  eu volutpat nisi eleifend.
 
 '''
+
+if not os.path.exists('notes'):
+    os.makedirs('notes')
 
 for i in range(n_notes):
     ntags = random.randint(0, 5)
