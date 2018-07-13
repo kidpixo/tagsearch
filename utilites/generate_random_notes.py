@@ -31,3 +31,11 @@ for i in range(n_notes):
         file.write('tags : '+yaml.dump(tags_local))
         file.write('---\n')
         file.write(outtext)
+
+print('Generated {} notes in {}/notes/\n'
+      'Now tagsearch try typing:\n'
+      'TAGSEARCH_HOME=$(pwd)/notes tagsearch foo bar'
+        .format(
+    n_notes,
+    os.path.abspath('.')
+    ))
