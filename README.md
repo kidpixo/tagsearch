@@ -1,49 +1,38 @@
 # Tagsearch.py
 
-# Table Of Content
+[TOC]
 
-- [Test Run](#markdown-header-test-run)
-- [Tagsearch.vim](#markdown-header-tagsearch.vim)
-- [Example file](#markdown-header-example-file)
-- [Use from Commandline](#markdown-header-use-from-commandline)
-    - [Basics](#markdown-header-basics)
-    - [Usage](#markdown-header-usage)
-    - [Options](#markdown-header-options)
+This program searches among tags in yaml header in text files in a single directory.
 
+### why you should use it
 
-This script does one thing : search across all tags in yaml header in text files in
-a directory.
+If you ever had to skim through hundreds of text files searching for a particular topic, this could help.
 
-The files location is stored in the shell variavle `TAGSEARCH_HOME` or the default 
-is `$HOME/.notes/` .
+Have all metadata stored in a simple portable text file without any central db.
 
-The idea is to store metadata in a simple portable text file without any central db.
+### why you should not use it
 
-The only drawback is that the data are reconstructed on the fly at each call, but on
-modern computer with a reasnoable number of file it takes less than 1 second.
+Have all metadata stored in a simple portable text file without any central db. (this is not a typo!)
 
-Some informal benchmarks on my laptop shows ~1.5s with 10000 files, 
-with a couple of hundreds the whole script runs in about ~0.5s.
+The data are reconstructed on the fly at each call, on modern computers with a reasonable number of file it takes less than 1 second.
 
-## Example file
+If you don't like it, probably this is not for you.
+
+## Basic usage
 [^top](#markdown-header-tagsearchpy)
 
-```markdown
----
-tags : [test, Monty]
----
+    tagsearch foo !bar
 
-# Lorem ipsum dolor sit amet
+    notes 5.md  : ['foo',  'Monty', 'spaces', 'test']
+    notes 41.md : ['foo', 'spaces', 'test', 'spam']
 
-Lorem ipsum dolor sit amet,  consectetur adipiscing elit. 
-Fusce consequat suscipit auctor. Quisque accumsan ex in 
-auctor dignissim. In id.
+Returns  all files containing tag `foo` and exclude all with of `bar`.
 
-```
+The files location is stored in the shell variable `TAGSEARCH_HOME` or the default is `$HOME/.notes/` .
+You need (obviously) to have some file for the script to run.
+If you havent, see below [Test Run](#markdown-header-test-run)
 
-Below a [vim-script](#markdown-header-tagsearch.vim) function example.
-
-Without any parameter, list all the files and tags.
+Without any parameter, `tagsearch` lists all the files and tags in long formt.
 
 Tags with ! prepended are delete from result.
 
@@ -54,6 +43,21 @@ Some special tags are reserved for internal use:
 - `tagsempty` : files with empty in `tags` array
 
 You can of course use them, but this will interfere with the aim of theese tags.
+
+## Example file
+[^top](#markdown-header-tagsearchpy)
+
+```markdown
+---
+tags : [test, Monty]
+---
+
+Here could be wahtever you want: I use markdown for my file,
+but you are free to use your style.
+
+Header format could be changed to other format with minimal effort 
+to JSON or TOML.
+```
 
 ### Test Run
 [^top](#markdown-header-tagsearchpy)
@@ -74,18 +78,11 @@ notes 20.md : ['bar', '42', 'spaces', 'dog', 'foo']
 this generates 50 random notes in the `notes/` subfolder, then search for all the notes with foo AND bar in the tags.
 The notes are randomly generated, your result may vary.
 
-To edit the matching files in vim, pipe the result in vim quickfix directly from shell (bash):
-
-```bash
-$ vim -q <(./tagsearch.py -e foo bar)
-```
-
-or use the  `Tagsearch` [command](#markdown-header-tagsearchvim) below directly in vim.
-
 ## Tagsearch.vim
 [^top](#markdown-header-tagsearchpy)
 
-Add this in your .vimrc (or source tagsearch.vim) and set the path to the script 
+Add this in your .vimrc (or source tagsearch.vim) and set the path to the 
+`tagsearch` script (use the output of `which tagsearch`) in `g:tagsearchcmd`.
 
 ```vim
 " path to the tagsearch.py script
@@ -106,42 +103,28 @@ endfunction
 command!  -nargs=* -complete=customlist,TagsearchComp Tagsearch call Tagsearch(<f-args>)
 ```
 
+This define the command `Tagsearch` and completion based on all your tags.
 
-"}}}
+Usage:
 
-This define the command `Tagsearch` that could be called as
-
-    :Tagsearch foo bar
+    :Tagsearch foo [<Tab><Tab>]
 
 This will :
 
 - execute tagsearch.py wiht `-ef foo bar` as arguments
+- optional Tab will present you all your tags.
 - populate the quickfix window with the results without jumping
-- open the quickfix windowi
+- open the quickfix windoww
 
 Using the excellent [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) (pairs of handy bracket mappings) you could navigate the results with `]q` (:cnext) and `[q]` ( :cprevious ).
 
-## Completion
+## Bash Completion
 
 In `utilites/tagsearch_completion.bash` put a simple bash completion function.
 
 Now is just completing all the existing tags in your file list.
 
 Just source it in your .bashrc like `. tagsearch_completion.bash`
-
-
-## Use from Commandline
-[^top](#markdown-header-tagsearchpy)
-
-This is the [docopt](http://docopt.org/) documentation from the main script
-`tagsearch/tagsearch`
-
-### Basics
-[^top](#markdown-header-tagsearchpy)
-
-    tagsearch foo !bar
-
-Returns  all files containing tag `foo` and exclude all with of `bar`.
 
 ### Usage
 [^top](#markdown-header-tagsearchpy)
@@ -152,7 +135,7 @@ Returns  all files containing tag `foo` and exclude all with of `bar`.
     tagsearch.py -h | --help
     tagsearch.py -v | --version
 
-### Options
+#### Options
 [^top](#markdown-header-tagsearchpy)
 
     -f --fullpath     output full file path (default False).
