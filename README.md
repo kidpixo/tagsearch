@@ -2,6 +2,8 @@
 
 [TOC]
 
+[comment]: # [TOC] generate the Table of Contents on Bitbucket in Markdown files.
+
 This program searches among tags in yaml header in text files in a single directory.
 
 ### why you should use it
