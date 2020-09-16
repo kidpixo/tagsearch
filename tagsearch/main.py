@@ -1,6 +1,37 @@
-#!/usr/bin/env python
-# vim: filetype=python tabstop=8 expandtab shiftwidth=4 softtabstop=4
 # -*- coding: utf-8 -*-
+"""Search all tags from yaml frontmatter in text files.
+Files location is in the TAGSEARCH_HOME variable or $HOME/.notes.
+Witouht any paramter, list all the files and tags.
+A !TAG exclude TAG from result.
+
+Basics:
+
+  tagsearch foo !bar
+
+Returns  all files containing tag `foo` and exclude all with of `bar`.
+
+Usage:
+  tagsearch.py
+  tagsearch.py [<tags>...]
+  tagsearch.py [-faescd] [-p | -pl] [-t | -tl] [<tags>...]
+  tagsearch.py -h | --help
+  tagsearch.py -v | --version
+
+Options:
+  -f --fullpath     output full file path (default False).
+  -a --align        aligh the output in columns (default False).
+  -p --pathonly     output only the filenames
+  -t --tagsonly     output only the unique tags
+  -l --list         flat list output, requires -p|--pathhonly or -t|--tagsonly.
+  -e --errorformat  output vim errorformat `%f:%l:%m` for quickfix, implies -f|--fullpath.
+  -s --escape       escape the filenames with " to protect whitespaces
+  -c --check        check if all data contains frontmatter and, a 'tags' entry, if tags is a list, TODO
+  -d --debug        print the command to execute in the command line and the passed arguments and do not execute the actual command.
+  -h --help         show help.
+  -v --version      show version.
+"""
+
+
 def main():
     import tagsearch
     # process : parse args
@@ -37,8 +68,3 @@ def main():
     #  input : result of query + parsed user option 
     # output : print formatted results
     tagsearch.functions.print_results(arguments, result)
-
-
-if __name__ == '__main__':
-    import tagsearch
-    tagsearch.main.main()
