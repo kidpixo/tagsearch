@@ -20,9 +20,9 @@ setup(
             ]
     ),
     keywords='yaml frontmatter search',
-    scripts=['tagsearch/tagsearch'],
+    scripts=['tagsearch/tagsearch_script'],
     entry_points={ 
-        "console_scripts": [ "tagsearch_cli = tagsearch.main:main" ]
+        "console_scripts": [ "tagsearch = tagsearch.main:main" ]
         },
     # TODO: Update this as we add dependencies
     # use setup.py + requirements.tx trick, see
