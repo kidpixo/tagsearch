@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# vim: filetype=python tabstop=8 expandtab shiftwidth=4 softtabstop=4
+# -*- coding: utf-8 -*-
+def main():
+    import tagsearch
+    # process : parse args
+    #   input : docopt default is argument vector passed to your program  (sys.argv[1:])
+    #  output : dict 
+    from docopt import docopt
+    arguments = docopt(__doc__, version='tagsearch 0.1')
+
+    # process: check data location
+    # TODO   : add option to pass location in arguments? 
+    #  input : ENVIROMENT var/config
+    # output : pathlib.Path 
+    data_base_path = tagsearch.functions.data_base_path_checker()
+    # 29.7 µs ± 494 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+
+    # process: load data and build in memory tinydb
+    # TODO   : 
+    #  input : data location, pathlib.Path
+    # output : tinydb.TinyDB
+    db = tagsearch.functions.load_data_to_tinydb(data_base_path) 
+    # 1000 files : 620 ms ± 63.7 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+
+    # process: query the data
+    #  input : tags lists, data db 
+    # output : list of output
+    result = tagsearch.functions.query_db(arguments['<tags>'], db)
+
+    if arguments['--debug'] :
+        import pprint
+        print(data_base_path)
+        pprint.pprint(arguments)
+
+    # process: data output 
+    #  input : result of query + parsed user option 
+    # output : print formatted results
+    tagsearch.functions.print_results(arguments, result)
+
+
+if __name__ == '__main__':
+    import tagsearch
+    tagsearch.main.main()

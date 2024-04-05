@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# vim: filetype=python tabstop=8 expandtab shiftwidth=4 softtabstop=4
 # -*- coding: utf-8 -*-
 """Search all tags from yaml frontmatter in text files.
 Files location is in the TAGSEARCH_HOME variable or $HOME/.notes.
@@ -34,8 +32,7 @@ Options:
 """
 
 
-if __name__ == '__main__':
-
+def main():
     import tagsearch
     # process : parse args
     #   input : docopt default is argument vector passed to your program  (sys.argv[1:])
